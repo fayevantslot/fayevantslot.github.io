@@ -1,0 +1,680 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLAB Manual Hub</title>
+    <style>
+      :root {
+        --blue: #0047FF;
+        --orange: #FF5C00;
+        --black: #0A0A0A;
+        --white: #F5F3EE;
+        --grey: #E0DED9;
+        --light: #F9F7F3;
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        background: var(--light);
+        color: var(--black);
+        font-family: 'DM Sans', sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      header {
+        background: var(--black);
+        color: var(--white);
+        padding: 48px 40px 40px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 300px; height: 300px;
+        border: 60px solid var(--blue);
+        border-radius: 50%;
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      header::after {
+        content: '';
+        position: absolute;
+        bottom: -40px; left: 200px;
+        width: 180px; height: 180px;
+        border: 40px solid var(--orange);
+        border-radius: 50%;
+        opacity: 0.25;
+        pointer-events: none;
+      }
+
+      .lab-tag {
+        font-family: 'Space Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--orange);
+        margin-bottom: 16px;
+      }
+
+      header h1 {
+        font-family: 'Space Mono', monospace;
+        font-size: clamp(28px, 6vw, 52px);
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--white);
+        position: relative;
+        z-index: 1;
+      }
+
+      header h1 span { color: var(--blue); }
+
+      .header-sub {
+        margin-top: 12px;
+        font-size: 14px;
+        color: #888;
+        font-weight: 300;
+        position: relative;
+        z-index: 1;
+      }
+
+      .tabs {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        gap: 10px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+      }
+
+      .tab-button {
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.4);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+      }
+
+      .tab-button.active,
+      .tab-button:hover {
+        background: #fff;
+        color: var(--black);
+        border-color: #fff;
+      }
+
+      .beam {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--orange), var(--blue), transparent);
+        background-size: 200%;
+        animation: beam 2.5s linear infinite;
+        margin: 0;
+      }
+
+      @keyframes beam {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      .intro-banner {
+        background: var(--blue);
+        color: white;
+        padding: 24px 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .intro-banner .icon { font-size: 32px; flex-shrink: 0; }
+      .intro-banner p { font-size: 15px; line-height: 1.5; }
+      .intro-banner strong { font-weight: 700; }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 48px 24px 80px;
+      }
+
+      .tab-content { display: none; }
+      .tab-content.active { display: block; }
+
+      .choice-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 32px;
+      }
+
+      .choice-card {
+        background: white;
+        border: 1.5px solid var(--grey);
+        border-radius: 16px;
+        padding: 28px 22px;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.05);
+        transition: transform 0.2s, border-color 0.2s;
+        cursor: pointer;
+      }
+
+      .choice-card:hover { transform: translateY(-3px); border-color: var(--blue); }
+
+      .choice-card h2 {
+        font-family: 'Space Mono', monospace;
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+
+      .choice-card p { color: #555; font-size: 14px; line-height: 1.6; }
+
+      .step {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 0 24px;
+        margin-bottom: 48px;
+        animation: fadeUp 0.5s ease both;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .step:nth-child(1) { animation-delay: 0.05s; }
+      .step:nth-child(2) { animation-delay: 0.1s; }
+      .step:nth-child(3) { animation-delay: 0.15s; }
+      .step:nth-child(4) { animation-delay: 0.2s; }
+      .step:nth-child(5) { animation-delay: 0.25s; }
+
+      .step-num {
+        font-family: 'Space Mono', monospace;
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--grey);
+        line-height: 1;
+        padding-top: 4px;
+        text-align: right;
+      }
+
+      .step-content {
+        border-left: 3px solid var(--grey);
+        padding-left: 24px;
+      }
+
+      .step-content h2 {
+        font-family: 'Space Mono', monospace;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--black);
+        margin-bottom: 8px;
+      }
+
+      .step-content p {
+        color: #444;
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+
+      .step-icon {
+        font-size: 36px;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0 4px;
+      }
+
+      .chip {
+        background: var(--black);
+        color: var(--white);
+        font-family: 'Space Mono', monospace;
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 2px;
+        letter-spacing: 0.5px;
+      }
+
+      .chip.blue { background: var(--blue); }
+      .chip.orange { background: var(--orange); }
+
+      .alert {
+        border-radius: 4px;
+        padding: 14px 16px;
+        margin: 12px 0;
+        font-size: 14px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+
+      .alert.tip { background: #EBF0FF; border-left: 4px solid var(--blue); }
+      .alert.warn { background: #FFF0E8; border-left: 4px solid var(--orange); }
+      .alert.ok { background: #EAFAF1; border-left: 4px solid #00A651; }
+
+      .alert .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+      .alert p { margin: 0; color: #333; line-height: 1.5; }
+
+      .material-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+        margin: 14px 0;
+      }
+
+      .mat-card {
+        background: white;
+        border: 1.5px solid var(--grey);
+        border-radius: 6px;
+        padding: 14px 12px;
+        text-align: center;
+        font-size: 13px;
+        transition: border-color 0.2s, transform 0.2s;
+      }
+
+      .mat-card:hover { border-color: var(--blue); transform: translateY(-2px); }
+      .mat-card .mat-icon { font-size: 28px; margin-bottom: 6px; display: block; }
+      .mat-card strong { display: block; font-size: 13px; color: var(--black); font-weight: 600; }
+      .mat-card span { color: #777; font-size: 11px; }
+
+      .spec-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--grey);
+        font-size: 14px;
+      }
+      .spec-row:last-child { border-bottom: none; }
+      .spec-label { font-weight: 600; min-width: 160px; color: var(--black); }
+      .spec-val { color: #555; }
+
+      .post-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .post-list li {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        background: white;
+        border: 1.5px solid var(--grey);
+        padding: 10px 14px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .post-list li .emoji { font-size: 20px; }
+
+      footer {
+        background: var(--black);
+        color: var(--white);
+        text-align: center;
+        padding: 32px 24px;
+        font-size: 13px;
+        font-family: 'Space Mono', monospace;
+      }
+
+      footer span { color: var(--orange); }
+
+      .size-callout {
+        background: var(--black);
+        color: white;
+        border-radius: 6px;
+        padding: 18px 20px;
+        margin: 14px 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .size-callout .size-vis {
+        font-family: 'Space Mono', monospace;
+        font-size: 13px;
+        background: var(--blue);
+        padding: 10px 14px;
+        border-radius: 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="lab-tag">DLAB Manual Hub</div>
+        <h1>Choose your <span>Manual</span></h1>
+        <p class="header-sub">Select the lab guide you want to open: home, laser cutting, or 3D printing.</p>
+        <div class="tabs">
+            <button type="button" class="tab-button active" data-tab="home-tab" onclick="openTab('home-tab')">Home</button>
+            <button type="button" class="tab-button" data-tab="laser-tab" onclick="openTab('laser-tab')">Laser Cutting</button>
+            <button type="button" class="tab-button" data-tab="printing-tab" onclick="openTab('printing-tab')">3D Printing</button>
+            <button type="button" class="tab-button" data-tab="soldering-tab" onclick="openTab('soldering-tab')">Soldering</button>
+        </div>
+    </header>
+    <main>
+        <section class="tab-content active" id="home-tab">
+            <div class="intro-banner">
+                <span class="icon">🧭</span>
+                <div>
+                    <strong>Welcome to the DLAB guide hub.</strong>
+                    Use the buttons above or the cards below to open the manual you need.
+                </div>
+            </div>
+            <div class="choice-grid">
+                <article class="choice-card" onclick="openTab('laser-tab')">
+                    <h2>Laser Cutting</h2>
+                    <p>Open the laser cutter manual to see setup, safety, and cutting steps.</p>
+                </article>
+                <article class="choice-card" onclick="openTab('printing-tab')">
+                    <h2>3D Printing</h2>
+                    <p>Open the 3D printing manual for slicing, printing, and finishing guidance.</p>
+                </article>
+                <article class="choice-card" onclick="openTab('soldering-tab')">
+                    <h2>Soldering</h2>
+                    <p>Open the soldering manual for tools, safety, and joint best practices.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="tab-content" id="laser-tab">
+            <div class="intro-banner">
+                <span class="icon">⚡</span>
+                <div>
+                    <strong>Welcome to the DLAB laser cutter!</strong>
+                    Follow these steps to prepare your design. Not sure about something? The Lab Manager is always happy to help.
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">01</div>
+                <div class="step-content">
+                    <span class="step-icon">🖥️</span>
+                    <h2>Choose your software</h2>
+                    <p>Create your design in vector-based software. These are the best options:</p>
+                    <div class="chips">
+                        <span class="chip blue">Inkscape (free)</span>
+                        <span class="chip blue">Adobe Illustrator</span>
+                        <span class="chip">AutoCAD</span>
+                        <span class="chip">Fusion 360</span>
+                        <span class="chip">TinkerCAD</span>
+                        <span class="chip">SolidWorks</span>
+                    </div>
+                    <div class="size-callout">
+                        <div class="size-vis">580 × 380 mm</div>
+                        <div>
+                            <strong>Maximum work area</strong>
+                            <p>Always keep your design within these dimensions. Draw at 1:1 scale!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">02</div>
+                <div class="step-content">
+                    <span class="step-icon">📐</span>
+                    <h2>Prepare your design</h2>
+                    <p>Pay attention to these technical details before exporting:</p>
+                    <div class="spec-row">
+                        <span class="spec-label">📏 Scale</span>
+                        <span class="spec-val">Always 1:1 — what you see is what you get</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">🛤️ Paths</span>
+                        <span class="spec-val">All lines must be paths. Convert text to outlines!</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">🔗 Contours</span>
+                        <span class="spec-val">No intersecting lines, no open contours</span>
+                    </div>
+                    <div class="spec-row">
+                        <span class="spec-label">🔩 Small details</span>
+                        <span class="spec-val">Holes/shapes must be at least 50% of material thickness</span>
+                    </div>
+                    <div class="alert tip">
+                        <span class="icon">💡</span>
+                        <p><strong>Text to path:</strong> In Illustrator this is called "Convert to Outlines". In some CAD software it's called "explode" or "expand". Hover over text — if it's selectable as text, it still needs to be converted.</p>
+                    </div>
+                    <div class="alert warn">
+                        <span class="icon">⚠️</span>
+                        <p><strong>Kerf (cut width):</strong> The laser removes 0.08–0.1 mm of material per cut. For press-fit parts, you must account for this — otherwise your parts will be too loose!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">03</div>
+                <div class="step-content">
+                    <span class="step-icon">🧱</span>
+                    <h2>Choose your material</h2>
+                    <p>Start with cardboard if you're making a prototype — cheap and fast. Other options available at DLAB:</p>
+                    <div class="material-grid">
+                        <div class="mat-card">
+                            <span class="mat-icon">📦</span>
+                            <strong>Cardboard</strong>
+                            <span>Ideal for prototypes</span>
+                        </div>
+                        <div class="mat-card">
+                            <span class="mat-icon">🟫</span>
+                            <strong>MDF</strong>
+                            <span>Sturdy, easy to work with</span>
+                        </div>
+                        <div class="mat-card">
+                            <span class="mat-icon">🔷</span>
+                            <strong>Acrylic</strong>
+                            <span>Clean and transparent</span>
+                        </div>
+                        <div class="mat-card">
+                            <span class="mat-icon">🔲</span>
+                            <strong>Polycarbonate</strong>
+                            <span>Strong and flexible</span>
+                        </div>
+                    </div>
+                    <div class="alert tip">
+                        <span class="icon">💬</span>
+                        <p>Not sure which material suits your project? <strong>Ask the Lab Manager!</strong> They know the available thicknesses and materials best.</p>
+                    </div>
+                    <p style="font-size:14px; color:#555; margin-top:8px;">
+                        For assembled designs (e.g. a box with tabs): always account for <strong>material thickness</strong> in your design.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">04</div>
+                <div class="step-content">
+                    <span class="step-icon">💾</span>
+                    <h2>Export your file</h2>
+                    <p>Save your design in one of these formats:</p>
+                    <div class="chips">
+                        <span class="chip orange">.DXF — recommended</span>
+                        <span class="chip">.SVG</span>
+                        <span class="chip">.AI</span>
+                        <span class="chip">.PDF</span>
+                    </div>
+                    <div class="alert ok">
+                        <span class="icon">✅</span>
+                        <p><strong>.DXF works best</strong> in our experience. This format accurately preserves all paths and dimensions.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">05</div>
+                <div class="step-content">
+                    <span class="step-icon">🔆</span>
+                    <h2>Cutting — together with the Lab Manager</h2>
+                    <p>Only trained users may operate the laser cutter independently. Everyone starts together with the Lab Manager:</p>
+                    <ul class="post-list">
+                        <li><span class="emoji">🗂️</span> Review the file together</li>
+                        <li><span class="emoji">⚙️</span> Select settings for your material</li>
+                        <li><span class="emoji">🧪</span> Run a material test if needed</li>
+                        <li><span class="emoji">✂️</span> Cut!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-num">06</div>
+                <div class="step-content">
+                    <span class="step-icon">✨</span>
+                    <h2>Post-processing (optional)</h2>
+                    <ul class="post-list">
+                        <li><span class="emoji">🪵</span> Sand edges / finish engraving</li>
+                        <li><span class="emoji">🔧</span> Glue parts together</li>
+                        <li><span class="emoji">🧹</span> Clean up your workspace — leave it tidy!</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="tab-content" id="printing-tab">
+            <div class="intro-banner">
+                <span class="icon">🖨️</span>
+                <div>
+                    <strong>3D Printing Manual</strong>
+                    Use these steps to prepare your model and start printing safely.
+                </div>
+            </div>
+
+            <article class="step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                    <span class="step-icon">📦</span>
+                    <h2>Prepare the model</h2>
+                    <p>Check the model for errors, orient it for best print quality, and generate supports if needed.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                    <span class="step-icon">🧮</span>
+                    <h2>Slice with correct settings</h2>
+                    <p>Choose the right layer height, infill, print speed, and temperature for your filament.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                    <span class="step-icon">📏</span>
+                    <h2>Level the bed</h2>
+                    <p>Make sure the print bed is level and the nozzle height is calibrated before starting the print.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                    <span class="step-icon">⏳</span>
+                    <h2>Start and monitor</h2>
+                    <p>Begin the print and watch the first layer carefully to ensure adhesion and proper extrusion.</p>
+                </div>
+            </article>
+
+            <article class="alert tip">
+                <span class="icon">💡</span>
+                <p>Keep the print area clean and avoid touching the hot nozzle or bed while printing.</p>
+            </article>
+        </section>
+
+        <section class="tab-content" id="soldering-tab">
+            <div class="intro-banner">
+                <span class="icon">🔌</span>
+                <div>
+                    <strong>Soldering Guide</strong>
+                    Learn the safest and cleanest way to solder electronics.
+                </div>
+            </div>
+
+            <article class="step">
+                <span class="step-num">1</span>
+                <div class="step-content">
+                    <span class="step-icon">🧰</span>
+                    <h2>Prepare your workspace</h2>
+                    <p>Work in a well-ventilated area with a heat-resistant mat, fume extractor, and eye protection.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">2</span>
+                <div class="step-content">
+                    <span class="step-icon">🔧</span>
+                    <h2>Prep components</h2>
+                    <p>Trim leads, clean pads, and tin the tip of the soldering iron before starting.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">3</span>
+                <div class="step-content">
+                    <span class="step-icon">🧪</span>
+                    <h2>Solder the joint</h2>
+                    <p>Heat the pad and lead, then apply solder until it flows smoothly. Remove the solder first, then the iron.</p>
+                </div>
+            </article>
+
+            <article class="step">
+                <span class="step-num">4</span>
+                <div class="step-content">
+                    <span class="step-icon">✨</span>
+                    <h2>Inspect and clean</h2>
+                    <p>Check for shiny, smooth joints and remove flux residue with isopropyl alcohol.</p>
+                </div>
+            </article>
+
+            <article class="alert warn">
+                <span class="icon">⚠️</span>
+                <p>Never touch the soldering iron tip and always unplug it after use.</p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>DLAB manual hub · choose a tab to navigate</p>
+    </footer>
+
+    <script>
+      window.openTab = function(tabId) {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(function(btn) {
+          if (btn.dataset.tab === tabId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+
+        tabContents.forEach(function(section) {
+          if (section.id === tabId) {
+            section.classList.add('active');
+          } else {
+            section.classList.remove('active');
+          }
+        });
+      };
+
+      document.querySelectorAll('.tab-button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          openTab(this.dataset.tab);
+        });
+      });
+    </script>
+</body>
+</html>
